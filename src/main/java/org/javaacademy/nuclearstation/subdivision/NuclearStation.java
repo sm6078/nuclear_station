@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 public class NuclearStation {
     private final ReactorDepartment reactorDepartment;
     private BigDecimal totalAmountEnergyGenerated = BigDecimal.ZERO;
+    private int accidentCountAllTime;
     private static final int COUNT_DAY_IN_YEAR = 365;
 
     /**
@@ -54,5 +55,13 @@ public class NuclearStation {
         for (int i = 0; i < count; i++) {
             startYear();
         }
+        log.debug("Общее количество выработанной энергии за все вермя: {}", totalAmountEnergyGenerated);
+    }
+
+    /**
+     * прибавляет count к полю accidentCountAllTime
+     */
+    private void incrementAccident(int count) {
+        accidentCountAllTime += count;
     }
 }
