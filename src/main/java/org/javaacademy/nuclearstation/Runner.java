@@ -4,10 +4,12 @@ import org.javaacademy.nuclearstation.subdivision.NuclearStation;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Runner {
+    private static final int COUNT_YEAR = 3;
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("org.javaacademy.nuclearstation");
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext("org.javaacademy.nuclearstation");
         NuclearStation nuclearStation = context.getBean(NuclearStation.class);
-        nuclearStation.start(3);
+        nuclearStation.start(COUNT_YEAR);
         context.close();
     }
 }

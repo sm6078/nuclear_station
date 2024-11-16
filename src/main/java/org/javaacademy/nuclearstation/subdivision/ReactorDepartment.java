@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+import static java.math.BigDecimal.valueOf;
+
 /**
  * Реакторный цех
  * Данный цех отвечает за производство электроэнергии.
@@ -18,8 +20,11 @@ import java.math.BigDecimal;
 @Component
 @Slf4j
 public class ReactorDepartment {
+    private static final int LIMIT_RUNNER_WITHOUT_ERROR = 100;
+    private static final BigDecimal DEFAULT_AMOUNT_OF_ENERGY_PRODUCED = valueOf(10_000_000);
+
     private boolean isWork = false;
-    private static int runCounter;
+    private int runCounter;
 
     /**
      * В реакторном цехе есть метод run (запустить реактор)
@@ -31,14 +36,14 @@ public class ReactorDepartment {
     public BigDecimal run() throws ReactorWorkException, NuclearFuelIsEmptyException {
         if (isWork) {
             throw new ReactorWorkException("Реактор уже работает");
-        } else if (runCounter == 100) {
+        } else if (runCounter == LIMIT_RUNNER_WITHOUT_ERROR) {
             runCounter = 0;
-            throw new NuclearFuelIsEmptyException("Достигнут предел запусков - 100. " +
-                    "Необходимы профилактические работы");
+            throw new NuclearFuelIsEmptyException("Достигнут предел запусков - 100. "
+                    + "Необходимы профилактические работы");
         }
         isWork = true;
         runCounter += 1;
-        return BigDecimal.valueOf(10_000_000);
+        return DEFAULT_AMOUNT_OF_ENERGY_PRODUCED;
     }
 
     /**
@@ -52,5 +57,5 @@ public class ReactorDepartment {
             throw new ReactorWorkException("ReactorWorkException");
         }
         isWork = false;
-     }
+    }
 }
