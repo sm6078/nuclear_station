@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.javaacademy.nuclearstation.exception.NuclearFuelIsEmptyException;
 import org.javaacademy.nuclearstation.exception.ReactorWorkException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,9 +21,11 @@ import java.math.BigDecimal;
 @Slf4j
 public class NuclearStation {
     private final ReactorDepartment reactorDepartment;
+    @Lazy
+    private final SecurityDepartment securityDepartment;
     private BigDecimal totalAmountEnergyGenerated = BigDecimal.ZERO;
-    private int accidentCountAllTime;
     private static final int COUNT_DAY_IN_YEAR = 365;
+    private int accidentCountAllTime;
 
     /**
      * Выводит на экран: "Атомная станция начала работу".
@@ -46,6 +49,8 @@ public class NuclearStation {
         }
         totalAmountEnergyGenerated = totalAmountEnergyGenerated.add(yearEnergyGenerated);
         log.info("Атомная станция закончила работу. За год Выработано {} киловатт/часов", yearEnergyGenerated);
+        securityDepartment.reset();
+        log.debug("Обнулили счетчик инцидентов");
     }
 
     /**
@@ -61,7 +66,7 @@ public class NuclearStation {
     /**
      * прибавляет count к полю accidentCountAllTime
      */
-    private void incrementAccident(int count) {
+    public void incrementAccident(int count) {
         accidentCountAllTime += count;
     }
 }

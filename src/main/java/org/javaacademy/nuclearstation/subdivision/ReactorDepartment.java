@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.javaacademy.nuclearstation.exception.NuclearFuelIsEmptyException;
 import org.javaacademy.nuclearstation.exception.ReactorWorkException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,7 +23,8 @@ import static java.math.BigDecimal.valueOf;
 public class ReactorDepartment {
     private static final int LIMIT_RUNNER_WITHOUT_ERROR = 100;
     private static final BigDecimal DEFAULT_AMOUNT_OF_ENERGY_PRODUCED = valueOf(10_000_000);
-
+    @Lazy
+    private SecurityDepartment securityDepartment;
     private boolean isWork = false;
     private int runCounter;
 
@@ -35,9 +37,11 @@ public class ReactorDepartment {
      */
     public BigDecimal run() throws ReactorWorkException, NuclearFuelIsEmptyException {
         if (isWork) {
+            securityDepartment.addAccident();
             throw new ReactorWorkException("Реактор уже работает");
         } else if (runCounter == LIMIT_RUNNER_WITHOUT_ERROR) {
             runCounter = 0;
+            securityDepartment.addAccident();
             throw new NuclearFuelIsEmptyException("Достигнут предел запусков - 100. "
                     + "Необходимы профилактические работы");
         }
